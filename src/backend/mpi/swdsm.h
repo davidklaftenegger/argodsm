@@ -347,12 +347,16 @@ unsigned long getHomenode(unsigned long addr);
  * @brief Gets the offset of an address on the local nodes part of the global memory
  * @param addr Address in the global address space
  * @return addr-(start address of local process part of global memory)
+ * @deprecated
+ * @todo calls to this should be replaced by appropriate use of global_ptr
  */
 unsigned long getOffset(unsigned long addr);
 /**
  * @brief Gives an index to the sharer/writer vector depending on the address
  * @param addr Address in the global address space
  * @return index for sharer vector for the page
+ * @deprecated
+ * @todo calls to this should be replaced by appropriate use of global_ptr
  */
 inline unsigned long get_classification_index(uint64_t addr);
 #endif /* argo_swdsm_h */
