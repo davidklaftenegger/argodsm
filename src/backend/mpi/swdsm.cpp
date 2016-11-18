@@ -1171,14 +1171,7 @@ void argo_initialize(std::size_t argo_size, std::size_t cache_size){
 								 MPI_INFO_NULL, MPI_COMM_WORLD, &sharerWindow);
 	MPI_Win_create(lockbuffer, pagesize, 1, MPI_INFO_NULL, MPI_COMM_WORLD, &lockWindow);
 
-	memset(pagecopy, 0, cachesize*pagesize);
-	memset(touchedcache, 0, cachesize);
-	memset(globalData, 0, size_of_chunk*sizeof(argo_byte));
-	memset(cacheData, 0, cachesize*pagesize);
-	memset(lockbuffer, 0, pagesize);
-	memset(globalSharers, 0, gwritersize);
-	memset(cacheControl, 0, cachesize*sizeof(control_data));
-
+	//Sets cache control structures to initial state.
 	for(j=0; j<cachesize; j++){
 		cacheControl[j].tag = GLOBAL_NULL;
 		cacheControl[j].state = INVALID;
