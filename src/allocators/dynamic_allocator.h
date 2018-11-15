@@ -14,10 +14,16 @@
  */
 void* dynamic_alloc(size_t size);
 
+/** @fortran{dynamic_alloc} */
+void* dynamic_alloc_(size_t* size);
+
 /**
  * @brief basic free function for dynamic allocations, for C interface
  * @param ptr pointer to free
  */
 void dynamic_free(void* ptr);
+
+/** @fortran{dynamic_free} */
+void dynamic_free_(void* ptr);
 
 #endif /* argo_dynamic_allocators_h */

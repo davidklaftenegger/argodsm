@@ -656,6 +656,8 @@ void *writeloop(void * x){
 		sem_post(&ibsem);
 		sem_post(&writerwaitsem);
 	}
+
+	return NULL;
 }
 
 void * loadcacheline(void * x){

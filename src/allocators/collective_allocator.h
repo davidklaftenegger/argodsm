@@ -14,10 +14,16 @@
  */
 void* collective_alloc(size_t size);
 
+/** @fortran{collective_alloc} */
+void* collective_alloc_(size_t* size);
+
 /**
  * @brief basic free function for collective allocations, for C interface
  * @param ptr pointer to free
  */
 void collective_free(void* ptr);
+
+/** @fortran{collective_free} */
+void collective_free_(void* ptr);
 
 #endif /* argo_collective_allocators_h */

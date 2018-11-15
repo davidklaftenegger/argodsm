@@ -24,6 +24,11 @@ void* collective_alloc(size_t size) {
 }
 
 extern "C"
+void* collective_alloc_(size_t* size) {
+	return collective_alloc(*size);
+}
+
+extern "C"
 void collective_free(void* ptr) {
 	using namespace argo::allocators;
 	using atype = decltype(default_collective_allocator)::value_type;
@@ -33,9 +38,19 @@ void collective_free(void* ptr) {
 }
 
 extern "C"
+void collective_free_(void* ptr) {
+	return collective_free(ptr);
+}
+
+extern "C"
 void* dynamic_alloc(size_t size) {
 	using namespace argo::allocators;
 	return static_cast<void*>(default_dynamic_allocator.allocate(size));
+}
+
+extern "C"
+void* dynamic_alloc_(size_t* size) {
+	dynamic_alloc(*size);
 }
 
 extern "C"
@@ -45,4 +60,9 @@ void dynamic_free(void* ptr) {
 	if (ptr == NULL)
 		return;
 	default_dynamic_allocator.free(static_cast<atype*>(ptr));
+}
+
+extern "C"
+void dynamic_free_(void* ptr) {
+	dynamic_free(ptr);
 }

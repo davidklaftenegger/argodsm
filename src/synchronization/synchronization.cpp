@@ -16,4 +16,8 @@ extern "C" {
 	void argo_barrier(size_t threadcount) {
 		argo::barrier(threadcount);
 	}
+
+	void argo_barrier_(size_t* threadcount) {
+		argo_barrier(*threadcount);
+	}
 }

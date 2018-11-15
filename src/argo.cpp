@@ -42,9 +42,15 @@ extern "C" {
 	void argo_init(size_t size) {
 		argo::init(size);
 	}
+	void argo_init_(size_t* size) {
+		argo_init(*size);
+	}
 
 	void argo_finalize() {
 		argo::finalize();
+	}
+	void argo_finalize_() {
+		argo_finalize();
 	}
 
 	void argo_reset() {
@@ -61,11 +67,23 @@ extern "C" {
 		default_collective_allocator.set_mempool(&collective_prepool);
 	}
 
+	void argo_reset_() {
+		argo_reset();
+	}
+
 	int argo_node_id() {
 		return argo::node_id();
 	}
 
+	int argo_node_id_() {
+		return argo_node_id();
+	}
+
 	int argo_number_of_nodes() {
 		return argo::number_of_nodes();
+	}
+
+	int argo_number_of_nodes_() {
+		return argo_number_of_nodes();
 	}
 }

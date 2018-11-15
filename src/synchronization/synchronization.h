@@ -18,4 +18,7 @@
  */
 void argo_barrier(size_t threadcount);
 
+/** @fortran{argo_barrier} */
+void argo_barrier_(size_t* threadcount);
+
 #endif /* argo_synchronization_h */
