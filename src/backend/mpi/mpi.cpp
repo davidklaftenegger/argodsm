@@ -134,6 +134,10 @@ namespace argo {
 			argo_initialize(argo_size, cache_size);
 		}
 
+		void init_crap_barrier() {
+			backend_init_crap_barrier();
+		}
+
 		node_id_t node_id() {
 			return argo_get_nid();
 		}

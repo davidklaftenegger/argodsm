@@ -1069,6 +1069,9 @@ void argo_initialize(std::size_t argo_size, std::size_t cache_size){
 
 	argo_reset_coherence(1);
 		
+}
+
+void backend_init_crap_barrier() {
 	// std::size_t counter for barrier
 	std::size_t* crap_barrier_counter_ptr = new (globalData + 16) std::size_t;
 	bool* crap_barrier_flag_ptr = new (globalData + 24) bool;

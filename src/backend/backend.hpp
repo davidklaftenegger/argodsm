@@ -51,6 +51,7 @@ namespace argo {
 		 *       is defined by the backend, which is wrong design-wise.
 		 */
 		void init(std::size_t argo_size, std::size_t cache_size);
+		void init_crap_barrier();
 
 		/**
 		 * @brief get ArgoDSM node ID

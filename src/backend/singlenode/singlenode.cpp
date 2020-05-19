@@ -83,7 +83,8 @@ namespace argo {
 			naive_data_distribution<0>::set_memory_space(nodes, memory, argo_size);
 			sig::signal_handler<SIGSEGV>::install_argo_handler(&singlenode_handler);
 		}
-
+		void init_crap_barrier() {}
+	
 		node_id_t node_id() {
 			return my_node_id;
 		}

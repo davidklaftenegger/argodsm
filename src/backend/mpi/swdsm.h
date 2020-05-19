@@ -142,6 +142,7 @@ void set_sighandler();
  * @param cache_size Size in bytes of your cache, will be rounded to nearest multiple of cacheline size (in bytes)
  */
 void argo_initialize(std::size_t argo_size, std::size_t cache_size);
+void backend_init_crap_barrier();
 
 /**
  * @brief Shutting down ArgoDSM runtime
