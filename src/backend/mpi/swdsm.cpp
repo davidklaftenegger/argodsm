@@ -9,6 +9,9 @@
 #include "virtual_memory/virtual_memory.hpp"
 #include "swdsm.h"
 
+#include "data_distribution/data_distribution.hpp"
+#include "backend/backend.hpp"
+
 namespace vm = argo::virtual_memory;
 namespace sig = argo::signal;
 
@@ -139,6 +142,9 @@ static const unsigned int pagesize = 4096;
 unsigned long GLOBAL_NULL;
 /** @brief  Statistics */
 argo_statistics stats;
+
+argo::data_distribution::global_ptr<std::size_t> crap_barrier_counter;
+argo::data_distribution::global_ptr<bool> crap_barrier_flag;
 
 namespace {
 	/** @brief constant for invalid ArgoDSM node */
@@ -1062,6 +1068,13 @@ void argo_initialize(std::size_t argo_size, std::size_t cache_size){
 	}
 
 	argo_reset_coherence(1);
+		
+	// std::size_t counter for barrier
+	std::size_t* crap_barrier_counter_ptr = new (globalData + 16) std::size_t;
+	bool* crap_barrier_flag_ptr = new (globalData + 24) bool;
+	using namespace argo::data_distribution;
+	crap_barrier_counter = global_ptr<std::size_t>(crap_barrier_counter_ptr);
+	crap_barrier_flag = global_ptr<bool>(crap_barrier_flag_ptr);
 }
 
 void argo_finalize(){
@@ -1135,6 +1148,18 @@ void self_invalidation(){
 	stats.selfinvtime += (t2-t1);
 }
 
+void custom_crap_barrier() {
+	static bool flag_direction = false;
+	flag_direction = ! flag_direction;
+	auto current_value = argo::backend::atomic::fetch_add(crap_barrier_counter, 1);
+	if(current_value == argo_get_nodes() - 1) {
+		argo::backend::atomic::store(crap_barrier_counter, 0);
+		argo::backend::atomic::store(crap_barrier_flag, flag_direction);
+	} else {
+		while(argo::backend::atomic::load(crap_barrier_flag) != flag_direction); // busy wait
+	}
+}
+
 void swdsm_argo_barrier(int n){ //BARRIER
 	double time1,time2;
 	pthread_t barrierlockholder;
@@ -1152,7 +1177,9 @@ void swdsm_argo_barrier(int n){ //BARRIER
 		pthread_mutex_lock(&cachemutex);
 		sem_wait(&ibsem);
 		flushWriteBuffer();
-		MPI_Barrier(workcomm);
+		// replaced with custom implementation due to bugs
+		// MPI_Barrier(workcomm);
+		custom_crap_barrier();
 		self_invalidation();
 		sem_post(&ibsem);
 		pthread_mutex_unlock(&cachemutex);
