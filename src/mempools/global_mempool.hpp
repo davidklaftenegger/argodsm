@@ -55,7 +55,7 @@ namespace argo {
 					/**@todo this initialization should move to tools::init() land */
 					using namespace data_distribution;
 					naive_data_distribution<0>::set_memory_space(nodes, memory, max_size);
-					bool* flag = new (&memory[sizeof(std::size_t)]) bool;
+					std::size_t* flag = new (&memory[sizeof(std::size_t)]) std::size_t;
 					global_tas_lock = new argo::globallock::global_tas_lock(flag);
 
 					if(backend::node_id()==0){

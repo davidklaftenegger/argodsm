@@ -46,21 +46,21 @@ protected:
 	argo::globallock::cohort_lock *cohort_lock;
 	/** @brief global tas lock for testing*/
 	argo::globallock::global_tas_lock *global_tas_lock;
-	/** @brief flag needed for the global tas lock*/
-	bool* flag;
+	/** @brief field needed for the global tas lock*/
+	std::size_t* field;
 	/** @brief global counter used in several tests */
 	int *counter;
 
 	LockTest() {
 		argo_reset();
 		argo::barrier();
-		flag = argo::conew_<bool>();
-		global_tas_lock = new argo::globallock::global_tas_lock(flag);
+		field = argo::conew_<std::size_t>();
+		global_tas_lock = new argo::globallock::global_tas_lock(field);
 		argo::barrier();
 	}
 
 	~LockTest() {
-		argo::codelete_(flag);
+		argo::codelete_(field);
 		delete global_tas_lock;
 		argo::barrier();
 	}

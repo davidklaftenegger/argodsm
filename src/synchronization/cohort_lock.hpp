@@ -64,8 +64,8 @@ namespace argo {
 				/** @brief Mapping between CPUs and NUMA nodes */
 				std::vector<int> numa_mapping;
 
-				/** @brief Flag necessary for the global_lock */
-				bool *tas_flag;
+				/** @brief Field necessary for the global_lock */
+				std::size_t* tas_field;
 
 				/** @brief A global TAS lock for locking between ArgoDSM nodes */
 				argo::globallock::global_tas_lock *global_lock;
@@ -115,8 +115,8 @@ namespace argo {
 					numanodes(1), // sane default
 					numahandover(0),
 					nodelockowner(NO_OWNER),
-					tas_flag(argo::conew_<bool>(false)),
-					global_lock(new argo::globallock::global_tas_lock(tas_flag)),
+					tas_field(argo::conew_<std::size_t>()),
+					global_lock(new argo::globallock::global_tas_lock(tas_field)),
 					node_lock(new argo::locallock::ticket_lock())
 				{
 					int num_cpus = sysconf(_SC_NPROCESSORS_CONF); // sane default
@@ -138,7 +138,7 @@ namespace argo {
 
 				/** @todo Documentation */
 				~cohort_lock(){
-					codelete_(tas_flag);
+					codelete_(tas_field);
 					delete global_lock;
 					delete[] local_lock;
 					delete node_lock;
